@@ -1,5 +1,6 @@
 ############Cleaner version of the rejection algorithm with regard to the contents of Tests.py with easy benchmarking possibilities
-############For making this easier, I will use mostly numpy functions for generating the different distributions
+############For making this easier, I will use mostly numpy functions for generating the different distributions and have a cleaner code
+############My versions of the algorithms to generate some kind of distributions can be found in the file Tests.py
 
 
 
