@@ -41,7 +41,7 @@ import time
         Numpy array of samples
 
     (Optionnal) Efficiency : float
-        Ratio of execution time over acceptance rate
+        Ratio of execution time over acceptance rate, requires efficiency_computation = True
 
 """
 
@@ -73,7 +73,7 @@ def accept_reject_algorithm (density,
             counter_points = 0
             while (counter_points < nb_points) :
                 uniform_sample = np.random.uniform(0.,1.)
-                g_sample = np.random.normal(0.,1.)
+                g_sample = np.random.exponential(1.)
                 if (uniform_sample<=(density(g_sample)/(M*exp_density(g_sample)))) :
                     sample.append(g_sample)
                     counter_points+=1
@@ -103,7 +103,7 @@ def accept_reject_algorithm (density,
             while (counter_points < nb_points) :
                 nb_points_generated +=1
                 uniform_sample = np.random.uniform(0.,1.)
-                g_sample = np.random.normal(0.,1.)
+                g_sample = np.random.exponential(1.)
                 if (uniform_sample<=(density(g_sample)/(M*exp_density(g_sample)))) :
                     sample.append(g_sample)
                     counter_points+=1
