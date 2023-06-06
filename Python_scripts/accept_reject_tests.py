@@ -8,10 +8,10 @@ f = lambda x : np.exp(-(x*x)/2)*((np.sin(6*x)**2)+(3*(np.cos(x)**2)*(np.sin(4*x)
 
 ###Quick testing of the functions 
 if(1==1) :
-    sample = ar.accept_reject_algorithm(f,  M = 10,envelope_distribution ='exponential', nb_points=10000 ,lambda_exp= 5)
+    sample = ar.accept_reject_algorithm(f,  M = 20,envelope_distribution ='exponential', nb_points=10000 ,lambda_exp= 1)
     print(sample[1])
     ar.sample_distribution_hist(sample[0])
 
-    sample1 = ar.accept_reject_algorithm(f, M = 4.5, nb_points=10000 )
+    sample1 = ar.accept_reject_algorithm(f, M = 4.5, nb_points=10000, test_compatibility=True )
     print(sample1[1])
     ar.sample_distribution_hist(sample1[0])
