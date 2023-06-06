@@ -58,14 +58,32 @@ def accept_reject_algorithm (density,
     time0 = time.time()
     sample = []
 
-    if(test_compatibility == True and envelope_distribution == 'normal') :
-        compatibility = True
-        x = np.linspace(-10,10,10000)
-        envelope = [M*np.exp(-(t**2.)/2.) for t in x]
-        f = [density(t) for t in x]
-        for i in range(0,np.size(x)) :
-            if(envelope[i]<f[i]) :
-                compatibility = False
+    if (test_compatibility == True ) :
+        if(envelope_distribution == 'normal') :
+            compatibility = True
+            x = np.linspace(-10,10,10000)
+            envelope = [np.exp(-(t**2.)/2.) for t in x]
+            f = [density(t) for t in x]
+            for i in range(0,np.size(x)) :
+                if(M*envelope[i]<f[i]) :
+                    compatibility = False
+            
+        if(envelope_distribution == 'exponential') :
+            compatibility = True
+            x = np.linspace(-10,10,10000)
+            envelope = x
+            for i in range(0,np.size(x)):
+                if(x[i]<0) : 
+                    envelope[i] = 0
+                else :
+                    envelope[i] = lambda_exp * np.exp(-lambda_exp*x[i]) 
+
+            f = [density(t) for t in x]
+            for i in range(0,np.size(x)) :
+                if(M*envelope[i]<f[i]) :
+                    compatibility = False
+        
+        
         if (compatibility == False) :
             raise ValueError("M and envelope are wrongly chosen and we can't ensure we end up with the proper distribution")
 
