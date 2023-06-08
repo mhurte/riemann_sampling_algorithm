@@ -25,3 +25,11 @@ In order to fasten the corrections of bugs, it is recommended that bug reports c
 Pull Requests 
 ------------------
 
+For contributing and involving yourself in the project, you can check in the "Issue" tab on github and try to answer a bug report or a feature request.
+If you believe that you can add or improve either a feature, or simply correct typos or improve the documentations, you can also make a pull request that will be reviewed and possibly implemented of it fits the library's needs.
+
+In any case, it is higly recommended to make sure that your code is easy to understand, readable, and well documented.
+
+
+
+
