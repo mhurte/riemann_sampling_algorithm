@@ -24,7 +24,7 @@ def g2(r, n, sg, dr): # second derivative
     return gr2
 
 def envelope_sampling(dim, sigma = 2, iter = 1, newton_x0 = 10 ) :
-    d = dim*(dim-1)/2
+    d = dim*(dim+1)/2
 
     #Finding the zero of this function is equivalent to finding the zero of the first derivative 
     zero_eq = lambda r :((d-1)*(sigma**2)*np.cosh(r/2)/2) - r*np.sinh(r/2) 
@@ -59,11 +59,10 @@ def envelope_sampling(dim, sigma = 2, iter = 1, newton_x0 = 10 ) :
            R_sample.append(er_sample)
            counter_points += 1
     return R_sample
-        
 
-    
-rr = np.linspace(0.01, +100, 1000)
-gr = g(rr, 4, 1, 0.01)
-test = envelope_sampling(4, iter = 1000)
-plt.hist(test, bins = 20)
+rr = np.linspace(0.01, +100, 10000)
+gr = g(rr, 5, 2.5, 0.01)
+test = envelope_sampling(5,sigma = 2.5, iter = 10000)
+plt.hist(test, bins = 20, density = True)
+plt.plot(rr,gr, color = "red")
 plt.show()
