@@ -47,7 +47,7 @@ def envelope_sampling(dim, sigma = 2, iter = 1) :
     gr = g(rr, dim, sigma, dr)
 
 
-    imax = int(rr[0]/dr+gr1_zero/dr)
+    imax = int((-rr[0]+gr1_zero)/dr)
     gmax = gr[imax]
     rmax = rr[imax]
     cmax = 1/sigma**2
@@ -61,21 +61,20 @@ def envelope_sampling(dim, sigma = 2, iter = 1) :
     R_sample = []
     counter_points = 0
     accepted_points = 0
-    while (counter_points < iter):
+    while (accepted_points < iter):
         uniform_sample = np.random.uniform(0.,1.)
         er_sample = norm.rvs(loc = rmax, scale = sc)
-        index = int(rr[0]/dr + er_sample/dr)
+        index = int((-rr[0] + er_sample)/dr)
         counter_points+=1
         if(uniform_sample<=((gr[index])/(M*er[index]))):
            R_sample.append(er_sample)
            accepted_points += 1
-           print(accepted_points)
     return R_sample, (accepted_points/counter_points)
 
 a = time.time()
 
 
-sigma = 5
+sigma = 4.1
 n = 3
 d = n*(n+1)/2
 lower = -10*sigma
@@ -89,7 +88,7 @@ if approx < upper :
     lower = -approx
 
 #Test with a given sigma and n
-if(1 == 1):
+if(1 == 0):
     rr = np.linspace(approx+lower, approx+upper, 10000)
     dr = rr[1]-rr[0]
     gr = g(rr, n, sigma,dr )
@@ -120,13 +119,12 @@ if(1 == 0):
 
 
 #Test for acceptance rate
-if(1 == 0):
+if(1 == 1):
     acceptance_rate = []
-    rr = np.linspace(0.1,3.9,39)
-    print(rr)
-    for i in range (1,40):
+    rr = np.linspace(0.1,3,30)
+    for i in range (1,31):
         a = time.time()
-        test = envelope_sampling(5,sigma = 0.1*i, iter = 10000)
+        test = envelope_sampling(5,sigma = 0.1*i, iter = 1000)
         b = time.time()-a
         acceptance_rate.append(test[1])
         print(i)
