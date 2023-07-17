@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import time 
 from mpmath import mp
 from mpmath import findroot
+import pyriemann as pr
 mp.prec = 50
 
 
@@ -317,7 +318,7 @@ def r_sampling2(dim, sigma = 2, iter = 1):
 def riemannian_gaussian_matrix_sampling(dim = 2, sigma = 1, amount = 1, accurate = False):
     nb_samples = 0
     samples = []
-    S = s_sampling(dim)
+
 
     if (accurate):
         r = r_sampling(dim, sigma, amount)[0]
@@ -325,6 +326,7 @@ def riemannian_gaussian_matrix_sampling(dim = 2, sigma = 1, amount = 1, accurate
         r = r_sampling2(dim, sigma, amount)[0]
         
     for i in range(amount):
+        S = s_sampling(dim)
         u = np.random.uniform(0.,1.)
         diag = np.linalg.eig(S)[0]
         detA = 1
@@ -332,10 +334,10 @@ def riemannian_gaussian_matrix_sampling(dim = 2, sigma = 1, amount = 1, accurate
         for k in range(dim):
             for j in range(dim):
                 if j < k:
-                    detA *= np.sinh(r * np.abs(diag[k] - diag[j])) / np.sinh(r)
+                    detA *= np.sinh(r[i] * np.abs(diag[k] - diag[j]))
         
-        if (u <= detA / (np.sinh(r))**(dim-1)):
-            samples.append(np.exp(r*S))
+        if (u <= np.abs(detA) / (np.sinh(r[i]))**(dim-1)):
+            samples.append(np.exp(r[i]*S))
             nb_samples+=1
 
     return samples
@@ -376,5 +378,41 @@ if(1 == 0):
     plt.show()
 
 if(1 == 1):
-    samples = riemannian_gaussian_matrix_sampling(2,2,2, True)
+
+    fig = plt.figure()
+    ax = fig.add_subplot(projection='3d')
+    samples = pr.datasets.sample_gaussian_spd(n_matrices= 300,mean = np.array([[1,0,0],[0,1,0],[0,0,1]]),sigma =0.5)
     print(samples)
+    #3DPLOT for 2D case
+    points = []
+    points.append([])
+    points.append([])
+    points.append([])
+    for i in range(0,300):
+        diag = np.linalg.eig(samples[i])[1]
+#        print("above")
+        points[0].append(diag[0])
+        points[1].append(diag[1])
+        points[2].append(diag[2])
+
+    ax.scatter(points[0],points[1],points[2], color = 'blue')
+
+    samples = riemannian_gaussian_matrix_sampling(3,0.5,10000, True)
+#    print("SECOND PART")
+    #3DPLOT for 2D case
+    points = []
+    points.append([])
+    points.append([])
+    points.append([])
+    for i in range(0,300):
+        diag = np.linalg.eig(samples[i])[1]
+#        print(diag)
+        points[0].append(diag[0])
+        points[1].append(diag[1])
+        points[2].append(diag[2])
+
+#    print(points[0])
+
+    ax.scatter(points[0],points[1],points[2], color = 'red')
+    ax.set_aspect('equal')
+    plt.show()
