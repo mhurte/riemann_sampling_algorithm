@@ -315,10 +315,10 @@ def r_sampling2(dim, sigma = 2, iter = 1):
 #CURS Algorithm
 
 
-def riemannian_gaussian_matrix_sampling(dim = 2, sigma = 1, amount = 1, accurate = False):
+def riemannian_gaussian_matrix_sampling(dim, mean, sigma, amount = 1, accurate = False):
     nb_samples = 0
     samples = []
-
+    mean_sqrt = pr.utils.base.sqrtm(mean)
 
     if (accurate):
         r = r_sampling(dim, sigma, amount)[0]
@@ -334,10 +334,10 @@ def riemannian_gaussian_matrix_sampling(dim = 2, sigma = 1, amount = 1, accurate
         for k in range(dim):
             for j in range(dim):
                 if j < k:
-                    detA *= np.sinh(r[i] * np.abs(diag[k] - diag[j]))
+                    detA *= np.sinh(r[i] * np.abs(diag[k] - diag[j])/2)/((diag[k] - diag[j])/2)
         
         if (u <= np.abs(detA) / (np.sinh(r[i]))**(dim-1)):
-            samples.append(np.exp(r[i]*S))
+            samples.append(mean_sqrt @ np.exp(r[i]*S) @ mean_sqrt)
             nb_samples+=1
 
     return samples
@@ -381,7 +381,7 @@ if(1 == 1):
 
     fig = plt.figure()
     ax = fig.add_subplot(projection='3d')
-    samples = pr.datasets.sample_gaussian_spd(n_matrices= 300,mean = np.array([[1,0,0],[0,1,0],[0,0,1]]),sigma =0.5)
+    samples = pr.datasets.sample_gaussian_spd(n_matrices= 300,mean = np.array([[1,4,-5],[0,30,0],[2,0,10]]),sigma =0.5)
     print(samples)
     #3DPLOT for 2D case
     points = []
@@ -397,7 +397,7 @@ if(1 == 1):
 
     ax.scatter(points[0],points[1],points[2], color = 'blue')
 
-    samples = riemannian_gaussian_matrix_sampling(3,0.5,10000, True)
+    samples = riemannian_gaussian_matrix_sampling(3,np.array([[1,4,-5],[0,30,0],[2,0,10]]),0.5,5000, True)
 #    print("SECOND PART")
     #3DPLOT for 2D case
     points = []
@@ -416,3 +416,4 @@ if(1 == 1):
     ax.scatter(points[0],points[1],points[2], color = 'red')
     ax.set_aspect('equal')
     plt.show()
+
